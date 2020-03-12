@@ -46,7 +46,7 @@ public class Tile{
             return "e";
 
         } else if(this.type == Type.EXIT){
-            return "e";
+            return "x";
 
         } else{
             return "#";
