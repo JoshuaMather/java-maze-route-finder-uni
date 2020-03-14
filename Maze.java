@@ -45,7 +45,7 @@ public class Maze{
 
     private Maze(){}
 
-    public static Maze fromTxt(String givenFile){
+    public static Maze fromTxt(String givenFile) throws InvalidMazeException{
         Maze m = new Maze();
 
         try(
@@ -53,11 +53,12 @@ public class Maze{
                 new FileReader(givenFile)
             )
         ){
+            Boolean enteranceExist = false;
+            Boolean exitExist = false;
             String line = breader.readLine();
-            int i=0;
-            while(line!=null){
-                System.out.println(line);
+            int lineLength = line.length();
 
+            while(line!=null){
                 List<Tile> tileList = new ArrayList<Tile>();
 
                 for(int j=0; j<line.length();j++){
@@ -66,15 +67,30 @@ public class Maze{
                     tileList.add(tile);
                     
                     if(tile.getType() == Tile.Type.ENTERANCE){
+                        if(enteranceExist==false){
                         m.enterance = tile;
+                        enteranceExist = true;
+                        }else{
+                            throw new MultipleEnteranceException();
+                        }
                     }
                     if(tile.getType() == Tile.Type.EXIT){
+                        if(exitExist==false){
                         m.exit = tile;
+                        exitExist = true;
+                        }else{
+                            throw new MultipleExitException();
+                        }
                     }
                 }
 
                 m.tiles.add(tileList);
+
+                if(lineLength != line.length()){
+                    throw new RaggedMazeException();
+                }
                 line = breader.readLine();
+                
 
 
             }
@@ -84,26 +100,23 @@ public class Maze{
        } catch (IOException e) {
             System.out.println("Error: IOException when reading "+ givenFile);
        }    
+
+        if(m.enterance == null){
+            throw new NoEnteranceException();
+        }
+        if(m.exit == null){
+            throw new NoExitException();
+        }
+
         return m;
     }
 
-    public static void tilesFromTxt(){
-       // List<List<Tile>> thetiles;
-
-
-    }
-
-    public void setTile(Tile givenTile, Coordinate givenCoordinate){
-        this.tiles.get(givenCoordinate.x).add(givenCoordinate.y, givenTile);
-
-        //setEnterance(Tile.fromChar('#'));
-
-    }
 
     public Tile getAdjacentTile(Tile givenTile, Direction givenDirection){
         /* to do
         check if tile is boundary tile
         check if tile exists - maybe do before call to this method
+        needs fixing similar to get tile location
         */
 
         Boolean found = false;
@@ -153,11 +166,15 @@ public class Maze{
     }
 
     public Coordinate getTileLocation(Tile givenTile){
+        /*
+        needs fixing 
+        */
+
         int i = 0;
         int j = 0;
         for(i=0; i<tiles.size(); i++){
             for(j=0; j<tiles.get(i).size();j++){
-               if(tiles.get(i).get(j) == givenTile){
+               if(tiles.get(i).get(j) == givenTile){ // this never is true
                    break;
                }
             }
@@ -183,17 +200,18 @@ public class Maze{
 
 
     public String toString(){
+        List<List<Tile>> theTiles = this.getTiles();
+
         String mazeString = "";
-        for(int i=0; i<tiles.size(); i++){
-            for(int j=0; j<tiles.get(i).size();j++){
-                if(j==tiles.get(i).size()){
-                    mazeString = mazeString + tiles.get(i).get(j).toString()+"\n";
-                } else{
-                    mazeString = mazeString + tiles.get(i).get(j).toString();
-                }
+        for(int i=0; i<theTiles.size(); i++){
+            mazeString = mazeString + theTiles.get(i).get(0).toString();
+            for(int j=1; j<theTiles.get(i).size();j++){
+                mazeString = mazeString + theTiles.get(i).get(j).toString();
             }
+            mazeString = mazeString + "\n";
 
         }
+
 
         return mazeString;
     }
