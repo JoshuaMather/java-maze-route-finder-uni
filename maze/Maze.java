@@ -1,3 +1,5 @@
+package maze;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
@@ -9,10 +11,17 @@ import java.util.ArrayList;
 
 
 public class Maze{
+    /**
+     * Direction inner class for maze direction
+     */
     public enum Direction{
         NORTH,SOUTH,EAST,WEST;
     }
 
+
+    /**
+     * Coordinate innner classe for cooridinates relating to tile position
+     */
     public class Coordinate{
         private int x;
         private int y;
@@ -38,6 +47,9 @@ public class Maze{
         }
     }
 
+    /**
+     * attributes for Maze class
+     */
     private Tile enterance;
     private Tile exit;
     private List<List<Tile>> tiles = new ArrayList<List<Tile>>();
@@ -46,6 +58,10 @@ public class Maze{
     private Maze(){}
 
     public static Maze fromTxt(String givenFile) throws InvalidMazeException{
+        /**
+         * Reads text file and creates a Maze instance based on it
+         * Will throw errors if the maze is not of the right specifications
+         */
         Maze m = new Maze();
 
         try(
@@ -113,6 +129,10 @@ public class Maze{
 
 
     public Tile getAdjacentTile(Tile givenTile, Direction givenDirection){
+        /**
+         * Gets the tile next to a given tile in a given direction
+         */
+
         /* to do
         check if tile is boundary tile
         check if tile exists - maybe do before call to this method
@@ -154,18 +174,31 @@ public class Maze{
     }
 
     public Tile getEnterance(){
+        /**
+         * Gets the enterance of a maze
+         */
         return this.enterance;
     }
 
     public Tile getExit(){
+        /**
+         * Gets the exit of a maze
+         */
         return this.exit;
     }
 
     public Tile getTileAtLocation(Coordinate givenCoordinate){
+        /**
+         * Get the tile at a given coordinate
+         */
         return this.tiles.get(givenCoordinate.x).get(givenCoordinate.y);
     }
 
     public Coordinate getTileLocation(Tile givenTile){
+        /**
+         * Gets location coordinate of a given tile
+         */
+
         /*
         needs fixing 
         */
@@ -185,21 +218,33 @@ public class Maze{
 
 
     public List<List<Tile>> getTiles(){
+        /**
+         * Get the tiles for a maze
+         */
         return tiles;
     }
 
 
     private void setEnterance(Tile givenTile){
+        /**
+         * Sets the enterance of a maze
+         */
         this.enterance = givenTile;
     }
 
 
     private void setExit(Tile givenTile){
+        /**
+         * Sets the exit of a maze
+         */
         this.exit = givenTile;
     }
 
 
     public String toString(){
+        /**
+         * Prints out the tiles for a mazes showing whole structure 
+         */
         List<List<Tile>> theTiles = this.getTiles();
 
         String mazeString = "";

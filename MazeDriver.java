@@ -1,3 +1,4 @@
+import maze.*;
 
 /*
 /mnt/d/University/Year\ 1/Computer\ Science/GitRepos/comp16412-coursework-2_p54507jm
