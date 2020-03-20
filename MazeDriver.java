@@ -2,6 +2,8 @@ import maze.*;
 
 /*
 /mnt/d/University/Year\ 1/Computer\ Science/GitRepos/comp16412-coursework-2_p54507jm
+javac --module-path ./lib/ --add-modules=javafx.controls
+java --module-path ./lib/ --add-modules=javafx.controls
 */
 
 public class MazeDriver{
@@ -15,9 +17,12 @@ public class MazeDriver{
         //m.getTileAtLocation(m.new Coordinate(0, 0));
 
         System.out.println(m.toString());
-        //System.out.println(m.getTileLocation(m.getTiles().get(0).get(0)));
 
-        //System.out.println(m.getTileAtLocation(m.new Coordinate(0, 0)));
+        Tile tile = m.getTiles().get(0).get(0);
+        System.out.println(tile);
+        System.out.println(m.getAdjacentTile(tile, Maze.Direction.SOUTH));
+
+        // System.out.println(m.getTileAtLocation(m.new Coordinate(0, 0)));
         }
         catch(Exception e){
             System.out.println(e);

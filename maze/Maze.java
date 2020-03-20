@@ -136,18 +136,23 @@ public class Maze{
         /* to do
         check if tile is boundary tile
         check if tile exists - maybe do before call to this method
-        needs fixing similar to get tile location
         */
 
         Boolean found = false;
         int i = 0;
         int j = 0;
-        for(i=0; i<tiles.size(); i++){
-            for(j=0; j<tiles.get(i).size();j++){
-               if(tiles.get(i).get(j) == givenTile){
-                   found = true;
-                   break;
-               }
+        
+        outerloop:
+        for(i=0; i<tiles.size();i++){
+            if(tiles.get(i).contains(givenTile)){
+                System.out.println(i);
+                for(j=0; j<tiles.get(i).size();j++){
+                    if(tiles.get(i).get(j).equals(givenTile)){
+                        System.out.println("found"); 
+                        found = true;
+                        break outerloop;
+                    }
+                }
             }
         }
 
@@ -199,20 +204,20 @@ public class Maze{
          * Gets location coordinate of a given tile
          */
 
-        /*
-        needs fixing 
-        */
-
         int i = 0;
         int j = 0;
-        for(i=0; i<tiles.size(); i++){
-            for(j=0; j<tiles.get(i).size();j++){
-               if(tiles.get(i).get(j) == givenTile){ // this never is true
-                   break;
-               }
+
+        outerloop:
+        for(i=0; i<tiles.size();i++){
+            if(tiles.get(i).contains(givenTile)){
+                System.out.println(i);
+                for(j=0; j<tiles.get(i).size();j++){
+                    if(tiles.get(i).get(j).equals(givenTile)){
+                        break outerloop;
+                    }
+                }
             }
         }
-
         return new Coordinate(i, j);
     }
 
@@ -221,7 +226,7 @@ public class Maze{
         /**
          * Get the tiles for a maze
          */
-        return tiles;
+        return this.tiles;
     }
 
 
