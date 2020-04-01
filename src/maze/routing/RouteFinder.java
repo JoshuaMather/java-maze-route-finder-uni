@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.io.IOException;
+import java.util.Collections;
+
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.File;
 
 
 public class RouteFinder{
@@ -19,7 +24,7 @@ public class RouteFinder{
 
     public RouteFinder(Maze givenMaze){
         this.maze = givenMaze;
-        route.push(maze.getEnterance());
+        this.route.push(maze.getEnterance());
     }
 
 
@@ -28,16 +33,21 @@ public class RouteFinder{
     }
 
 
-    // public List<Tile> getRoute(){
-    //     /*
-    //     return as list
-    //      */
-    //     ArrayList<Tile> routeList;
+    public List<Tile> getRoute(){
+        ArrayList<Tile> routeList = new ArrayList<Tile>();
 
+        while(this.route.isEmpty() == false){
+            routeList.add(this.route.pop());
+        }
 
+        Collections.reverse(routeList);
 
-    //     return routeList;
-    // }
+        for(int i=0; i<routeList.size(); i++){
+            this.route.push(routeList.get(i));
+        }
+
+        return routeList;
+    }
 
 
     public boolean isFinished(){
@@ -45,7 +55,24 @@ public class RouteFinder{
     }
 
 
-    public void save(String string){
+    public void save(String saveFile){
+        System.out.println(saveFile);
+        String mazeString = this.toString();
+        System.out.println(mazeString);
+        File file = new File(saveFile);
+
+        try(FileWriter fileWriter = new FileWriter(file)){
+
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+    
+            printWriter.print(mazeString);
+    
+            fileWriter.close();
+            printWriter.close();
+        }catch(IOException e){
+            System.out.println("Error");
+          }
+    
 
     }
 
@@ -182,6 +209,42 @@ public class RouteFinder{
 
     public String toString(){
         String s = "";
+        List<List<Tile>> theTiles = this.maze.getTiles();
+
+
+        for(int i=0; i<theTiles.size(); i++){
+            if(theTiles.get(i).get(0).getType() == Tile.Type.CORRIDOR){
+                if(route.contains(theTiles.get(i).get(0))){
+                    s = s + "*";
+                }else if(popped.contains(theTiles.get(i).get(0))){
+                    s = s + "-";
+                }else{
+                    s = s + ".";
+                }
+            }else{
+                s = s + theTiles.get(i).get(0).toString();
+            }
+            
+
+            for(int j=1; j<theTiles.get(i).size();j++){
+                if(theTiles.get(i).get(j).getType() == Tile.Type.CORRIDOR){
+                    if(route.contains(theTiles.get(i).get(j))){
+                        s = s + "*";
+                    }else if(popped.contains(theTiles.get(i).get(j))){
+                        s = s + "-";
+                    }else{
+                        s = s + ".";
+                    }
+                }else{
+                    s = s + theTiles.get(i).get(j).toString();
+                }
+                
+
+            }
+            s = s + "\n";
+
+        }
+
         return s;
     }
 }

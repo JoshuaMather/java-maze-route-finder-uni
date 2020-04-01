@@ -168,7 +168,7 @@ public class Maze{
                     return tiles.get(i+1).get(j);
 
                 case EAST:
-                    if(j==this.tiles.get(i).size()){
+                    if(j==this.tiles.get(i).size()-1){
                         return null;
                     }
                     return tiles.get(i).get(j+1);
