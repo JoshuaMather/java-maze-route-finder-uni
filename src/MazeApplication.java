@@ -56,11 +56,17 @@ public class MazeApplication extends Application{
 
         step.setOnAction(e->{
             if(rf.isFinished() == false){
-                //rf.setVis(vis);
-                // if get route empty throw error
-                rf.step();
-                System.out.println(rf.toString());
-                //vis = rf.getVis();
+                if(rf.step() == true){
+                    System.out.println("Maze finished");
+                }
+
+
+                vis.clearHBoxes();
+                vis.clearVBox();
+                vis.visualiseFromString(rf.toString());
+                this.mazeMap = vis.getMaze();
+                root.getChildren().set(2, mazeMap);
+                
             }else{
                 System.out.println("Maze is finished - no more steps to take");
             }
@@ -89,11 +95,12 @@ public class MazeApplication extends Application{
                 m = Maze.fromTxt("../mazes/"+file);
                 Visualisation v = new Visualisation();
                 vis = v;
-                vis.visualiseMap(m);
+                //vis.visualiseMap(m);
+                vis.visualiseFromString(m.toString());
                 RouteFinder r = new RouteFinder(m);
                 rf = r;
 
-                this.mazeMap = v.getMaze();
+                this.mazeMap = vis.getMaze();
                 root.getChildren().clear();
                 root.getChildren().addAll(hbox1, hbox2, mazeMap, hbox4);
                 stage.setScene(scene);

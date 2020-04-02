@@ -1,7 +1,6 @@
 package maze.routing;
 
 import maze.*;
-//import maze.visualisation.Visualisation;
 
 import java.util.Stack;
 import java.util.List;
@@ -78,12 +77,6 @@ public class RouteFinder{
 
 
     public boolean step(){
-        /*
-        check each direction
-        move 
-        if all null pop
-        */
-
         Tile nextTile;
         Tile poppedTile;
         Tile currenTile = this.route.peek();
@@ -99,11 +92,6 @@ public class RouteFinder{
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
                         Maze.Coordinate c = this.maze.getTileLocation(nextTile);
-
-                        // change visualisation
-                        //System.out.println(this.vis.getHboxes().get(c.getX()));
-
-
                         return false;
             
                     }
@@ -127,11 +115,6 @@ public class RouteFinder{
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
                         Maze.Coordinate c = this.maze.getTileLocation(nextTile);
-
-                        // change visualisation
-                        //System.out.println(this.vis.getHboxes().get(c.getX()));
-
-
                         return false;
             
                     }
@@ -155,11 +138,6 @@ public class RouteFinder{
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
                         Maze.Coordinate c = this.maze.getTileLocation(nextTile);
-
-                        // change visualisation
-                        //System.out.println(this.vis.getHboxes().get(c.getX()));
-
-
                         return false;
             
                     }
@@ -183,11 +161,6 @@ public class RouteFinder{
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
                         Maze.Coordinate c = this.maze.getTileLocation(nextTile);
-
-                        // change visualisation
-                        //System.out.println(this.vis.getHboxes().get(c.getX()));
-
-
                         return false;
             
                     }
@@ -202,7 +175,7 @@ public class RouteFinder{
 
         poppedTile = this.route.pop();
         this.popped.add(poppedTile);
-        // change visualisation to -
+        
         return false;
     }
 

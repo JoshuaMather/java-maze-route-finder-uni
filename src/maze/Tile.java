@@ -58,8 +58,8 @@ public class Tile{
         /**
          * Prints a representation of a tile
          */
-        if(this.type == Type.CORRIDOR){
-            return ".";
+        if(this.type == Type.WALL){
+            return "#";
 
         } else if(this.type == Type.ENTERANCE){
             return "e";
@@ -68,8 +68,7 @@ public class Tile{
             return "x";
 
         } else{
-            return "#";
-
+            return ".";
         }
 
     }
