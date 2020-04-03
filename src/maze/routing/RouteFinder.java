@@ -1,6 +1,7 @@
 package maze.routing;
 
 import maze.*;
+import maze.routing.NoRouteFoundException;
 
 import java.util.Stack;
 import java.util.List;
@@ -13,6 +14,11 @@ import java.util.Collections;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.File;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class RouteFinder{
@@ -54,6 +60,34 @@ public class RouteFinder{
     }
 
 
+    public static RouteFinder load(String loadFile){
+        Maze loadMaze = Maze.fromTxt("../mazes/"+loadFile);
+
+        RouteFinder rf = new RouteFinder(loadMaze);
+        String routeState = "";
+
+        try(
+            BufferedReader breader = new BufferedReader(
+                new FileReader(loadFile)
+            )
+        ){
+            String line = breader.readLine();
+
+            while(line!=null){
+                routeState = routeState + line + "\n";
+            }
+            System.out.println(routeState);
+
+            return rf;
+
+        }catch (FileNotFoundException e) {
+            System.out.println("Error: Could not open " + loadFile);
+        }catch (IOException e) {
+            System.out.println("Error: IOException when reading "+ loadFile);
+        }
+    }
+
+
     public void save(String saveFile){
         System.out.println(saveFile);
         String mazeString = this.toString();
@@ -76,7 +110,11 @@ public class RouteFinder{
     }
 
 
-    public boolean step(){
+    public boolean step() throws NoRouteFoundException{
+        if(this.route.isEmpty()){
+            throw new NoRouteFoundException();
+        }
+
         Tile nextTile;
         Tile poppedTile;
         Tile currenTile = this.route.peek();

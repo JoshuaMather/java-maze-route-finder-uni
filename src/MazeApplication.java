@@ -14,6 +14,7 @@ java --module-path ./lib/ --add-modules=javafx.controls
 import maze.*;
 import maze.visualisation.Visualisation;
 import maze.routing.RouteFinder;
+import maze.routing.NoRouteFoundException;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -56,16 +57,20 @@ public class MazeApplication extends Application{
 
         step.setOnAction(e->{
             if(rf.isFinished() == false){
-                if(rf.step() == true){
-                    System.out.println("Maze finished");
+                try{
+                    if(rf.step() == true){
+                        System.out.println("Maze finished");
+                    }
+    
+                    vis.clearHBoxes();
+                    vis.clearVBox();
+                    vis.visualiseFromString(rf.toString());
+                    this.mazeMap = vis.getMaze();
+                    root.getChildren().set(2, mazeMap);
+                }catch(NoRouteFoundException nr){
+                    System.out.println(nr);
                 }
-
-
-                vis.clearHBoxes();
-                vis.clearVBox();
-                vis.visualiseFromString(rf.toString());
-                this.mazeMap = vis.getMaze();
-                root.getChildren().set(2, mazeMap);
+                
                 
             }else{
                 System.out.println("Maze is finished - no more steps to take");
@@ -95,7 +100,6 @@ public class MazeApplication extends Application{
                 m = Maze.fromTxt("../mazes/"+file);
                 Visualisation v = new Visualisation();
                 vis = v;
-                //vis.visualiseMap(m);
                 vis.visualiseFromString(m.toString());
                 RouteFinder r = new RouteFinder(m);
                 rf = r;
@@ -144,6 +148,43 @@ public class MazeApplication extends Application{
         saveRoot.getChildren().addAll(labelBox2, inputBox2);
 
         Scene saveScene = new Scene(saveRoot);
+
+
+
+        VBox loadRoot = new VBox();
+        
+        HBox labelBox3 = new HBox();
+        Label label3 = new Label("Enter a maze file to load route");
+        labelBox3.getChildren().addAll(label3);
+
+        HBox inputBox3 = new HBox();
+        TextField tf3 = new TextField();
+        Button submit3 = new Button("Submit");
+
+        submit3.setOnAction(e->{
+            try{
+                String loadFile = "../mazes/"+tf3.getText();
+                rf = RouteFinder.load(loadFile);
+
+                Visualisation v = new Visualisation();
+                vis = v;
+                vis.visualiseFromString(rf.toString());
+
+                this.mazeMap = vis.getMaze();
+                root.getChildren().clear();
+                root.getChildren().addAll(hbox1, hbox2, mazeMap, hbox4);
+                stage.setScene(scene);
+                }
+                catch(Exception ex){
+                    System.out.println(ex);
+                }
+        });
+
+        inputBox3.getChildren().addAll(tf3, submit3);
+
+        loadRoot.getChildren().addAll(labelBox3, inputBox3);
+
+        Scene loadScene = new Scene(loadRoot);
         
 
         loadMap.setOnAction(e->{
@@ -154,8 +195,12 @@ public class MazeApplication extends Application{
             stage.setScene(saveScene);
         });
 
+        loadRoute.setOnAction(e->{
+            stage.setScene(loadScene);
+        });
 
-        stage.setScene(inputScene);
+
+        stage.setScene(scene);
         stage.setTitle("Maze Application");
         stage.show();
 
