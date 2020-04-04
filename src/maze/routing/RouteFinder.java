@@ -60,23 +60,31 @@ public class RouteFinder{
     }
 
 
-    public static RouteFinder load(String loadFile){
-        Maze loadMaze = Maze.fromTxt("../mazes/"+loadFile);
-
-        RouteFinder rf = new RouteFinder(loadMaze);
-        String routeState = "";
-
+    public static RouteFinder load(String loadFile){  
         try(
             BufferedReader breader = new BufferedReader(
                 new FileReader(loadFile)
             )
         ){
+            Maze loadMaze = Maze.fromTxt("../mazes/"+loadFile);
+            RouteFinder rf = new RouteFinder(loadMaze);
+            String routeState = "";    
+
             String line = breader.readLine();
 
             while(line!=null){
                 routeState = routeState + line + "\n";
+
+                line = breader.readLine();
             }
-            System.out.println(routeState);
+            
+            while(rf.toString().equals(routeState) == false){
+                try{
+                    rf.step();
+                }catch(NoRouteFoundException nr){
+                    System.out.println(nr);
+                }
+            }
 
             return rf;
 
@@ -84,9 +92,23 @@ public class RouteFinder{
             System.out.println("Error: Could not open " + loadFile);
         }catch (IOException e) {
             System.out.println("Error: IOException when reading "+ loadFile);
+        }catch(InvalidMazeException e){
+            System.out.println(e);
         }
+        return null;
     }
 
+    public Set getPopped(){
+        return this.popped;
+    }
+
+    public Stack getStack(){
+        return this.route;
+    }
+
+    public void routePush(Tile givenTile){
+        this.route.push(givenTile);
+    }
 
     public void save(String saveFile){
         System.out.println(saveFile);
@@ -129,7 +151,6 @@ public class RouteFinder{
                 if(this.route.contains(nextTile) == false){
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
-                        Maze.Coordinate c = this.maze.getTileLocation(nextTile);
                         return false;
             
                     }
@@ -152,7 +173,6 @@ public class RouteFinder{
                 if(this.route.contains(nextTile) == false){
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
-                        Maze.Coordinate c = this.maze.getTileLocation(nextTile);
                         return false;
             
                     }
@@ -175,7 +195,6 @@ public class RouteFinder{
                 if(this.route.contains(nextTile) == false){
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
-                        Maze.Coordinate c = this.maze.getTileLocation(nextTile);
                         return false;
             
                     }
@@ -198,7 +217,6 @@ public class RouteFinder{
                 if(this.route.contains(nextTile) == false){
                     if(this.popped.contains(nextTile) == false){
                         this.route.push(nextTile);
-                        Maze.Coordinate c = this.maze.getTileLocation(nextTile);
                         return false;
             
                     }
