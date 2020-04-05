@@ -5,7 +5,7 @@ public class Tile{
      * Inner class for type of tile
      */
     public enum Type{
-        CORRIDOR,ENTERANCE,EXIT,WALL;
+        CORRIDOR,ENTRANCE,EXIT,WALL;
     }
 
     private Type type;
@@ -25,7 +25,7 @@ public class Tile{
             return new Tile(Type.WALL);
 
         } else if(givenchar == 'e'){
-            return new Tile(Type.ENTERANCE);
+            return new Tile(Type.ENTRANCE);
 
         } else if(givenchar == 'x'){
             return new Tile(Type.EXIT);
@@ -42,7 +42,7 @@ public class Tile{
         return this.type;
     }
 
-    public boolean isNavigate(){
+    public boolean isNavigable(){
         /**
          * Check if a tile can be navigated through
          */
@@ -61,7 +61,7 @@ public class Tile{
         if(this.type == Type.WALL){
             return "#";
 
-        } else if(this.type == Type.ENTERANCE){
+        } else if(this.type == Type.ENTRANCE){
             return "e";
 
         } else if(this.type == Type.EXIT){

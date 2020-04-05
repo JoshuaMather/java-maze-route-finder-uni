@@ -50,7 +50,7 @@ public class Maze{
     /**
      * attributes for Maze class
      */
-    private Tile enterance;
+    private Tile entrance;
     private Tile exit;
     private List<List<Tile>> tiles = new ArrayList<List<Tile>>();
 
@@ -69,7 +69,7 @@ public class Maze{
                 new FileReader(givenFile)
             )
         ){
-            Boolean enteranceExist = false;
+            Boolean entranceExist = false;
             Boolean exitExist = false;
             String line = breader.readLine();
             int lineLength = line.length();
@@ -82,12 +82,12 @@ public class Maze{
                     Tile tile = Tile.fromChar(tileChar);
                     tileList.add(tile);
                     
-                    if(tile.getType() == Tile.Type.ENTERANCE){
-                        if(enteranceExist==false){
-                        m.enterance = tile;
-                        enteranceExist = true;
+                    if(tile.getType() == Tile.Type.ENTRANCE){
+                        if(entranceExist==false){
+                        m.entrance = tile;
+                        entranceExist = true;
                         }else{
-                            throw new MultipleEnteranceException();
+                            throw new MultipleEntranceException();
                         }
                     }
                     if(tile.getType() == Tile.Type.EXIT){
@@ -117,8 +117,8 @@ public class Maze{
             System.out.println("Error: IOException when reading "+ givenFile);
        }    
 
-        if(m.enterance == null){
-            throw new NoEnteranceException();
+        if(m.entrance == null){
+            throw new NoEntranceException();
         }
         if(m.exit == null){
             throw new NoExitException();
@@ -187,11 +187,11 @@ public class Maze{
         }
     }
 
-    public Tile getEnterance(){
+    public Tile getEntrance(){
         /**
-         * Gets the enterance of a maze
+         * Gets the entrance of a maze
          */
-        return this.enterance;
+        return this.entrance;
     }
 
     public Tile getExit(){
@@ -238,11 +238,11 @@ public class Maze{
     }
 
 
-    private void setEnterance(Tile givenTile){
+    private void setEntrance(Tile givenTile){
         /**
-         * Sets the enterance of a maze
+         * Sets the entrance of a maze
          */
-        this.enterance = givenTile;
+        this.entrance = givenTile;
     }
 
 
