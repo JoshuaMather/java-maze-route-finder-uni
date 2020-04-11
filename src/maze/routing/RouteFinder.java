@@ -111,7 +111,6 @@ public class RouteFinder{
             }
 
             return rf;
-
         }catch (FileNotFoundException e) {
             System.out.println("Error: Could not open " + loadFile);
         }catch (IOException e) {
@@ -128,12 +127,13 @@ public class RouteFinder{
      * Name of file to save to is passed in
      * File is then written to with RouteFinder's string representation
      */
-    public void save(String saveFile){
+    public void save(String saveFile) throws IOException{
         String mazeString = this.toString();
-        File file = new File(saveFile);
 
-        try(FileWriter fileWriter = new FileWriter(file)){
+        try{
+            File file = new File(saveFile);
 
+            FileWriter fileWriter = new FileWriter(file);
             PrintWriter printWriter = new PrintWriter(fileWriter);
     
             printWriter.print(mazeString);
@@ -142,6 +142,7 @@ public class RouteFinder{
             printWriter.close();
         }catch(IOException e){
             System.out.println("Error");
+            throw new IOException();
           }
     
 

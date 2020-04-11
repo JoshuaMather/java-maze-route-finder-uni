@@ -41,7 +41,7 @@ public class Maze{
 
         public String toString(){
             String coordString = "";
-            coordString = coordString + "(" + this.x + " " + this.y + ")";
+            coordString = coordString + "(" + this.getX() + ", " + this.y + ")";
 
             return coordString;
         }
@@ -57,7 +57,7 @@ public class Maze{
 
     private Maze(){}
 
-    public static Maze fromTxt(String givenFile) throws InvalidMazeException{
+    public static Maze fromTxt(String givenFile) throws InvalidMazeException, FileNotFoundException{
         /**
          * Reads text file and creates a Maze instance based on it
          * Will throw errors if the maze is not of the right specifications
@@ -69,8 +69,6 @@ public class Maze{
                 new FileReader(givenFile)
             )
         ){
-            Boolean entranceExist = false;
-            Boolean exitExist = false;
             String line = breader.readLine();
             int lineLength = line.length();
 
@@ -83,20 +81,12 @@ public class Maze{
                     tileList.add(tile);
                     
                     if(tile.getType() == Tile.Type.ENTRANCE){
-                        if(entranceExist==false){
-                        m.entrance = tile;
-                        entranceExist = true;
-                        }else{
-                            throw new MultipleEntranceException();
-                        }
+                        m.setEntrance(tile);
+
                     }
                     if(tile.getType() == Tile.Type.EXIT){
-                        if(exitExist==false){
-                        m.exit = tile;
-                        exitExist = true;
-                        }else{
-                            throw new MultipleExitException();
-                        }
+                        m.setExit(tile);
+
                     }
                 }
 
@@ -113,6 +103,7 @@ public class Maze{
 
         }catch (FileNotFoundException e) {
             System.out.println("Error: Could not open " + givenFile);
+            throw new FileNotFoundException();
        } catch (IOException e) {
             System.out.println("Error: IOException when reading "+ givenFile);
        }    
@@ -205,7 +196,9 @@ public class Maze{
         /**
          * Get the tile at a given coordinate
          */
-        return this.tiles.get(givenCoordinate.x).get(givenCoordinate.y);
+        int column = Maze.this.getTiles().get(0).size() - 1 - givenCoordinate.getY();
+        int row = givenCoordinate.getX();
+        return this.tiles.get(column).get(row);
     }
 
     public Coordinate getTileLocation(Tile givenTile){
@@ -226,7 +219,8 @@ public class Maze{
                 }
             }
         }
-        return new Coordinate(i, j);
+        i = Maze.this.getTiles().get(0).size() - 1 - i;
+        return new Coordinate(j, i);
     }
 
 
@@ -238,19 +232,27 @@ public class Maze{
     }
 
 
-    private void setEntrance(Tile givenTile){
+    private void setEntrance(Tile givenTile) throws InvalidMazeException{
         /**
          * Sets the entrance of a maze
          */
-        this.entrance = givenTile;
+        if(this.entrance == null){
+            this.entrance = givenTile;
+        }else{
+            throw new MultipleEntranceException();
+        }
     }
 
 
-    private void setExit(Tile givenTile){
+    private void setExit(Tile givenTile) throws InvalidMazeException{
         /**
          * Sets the exit of a maze
          */
-        this.exit = givenTile;
+        if(this.exit == null){
+            this.exit = givenTile;
+        }else{
+            throw new MultipleExitException();
+        }
     }
 
 

@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class Visualisation{
                     Label label = new Label("*");
                     label.setMinWidth(20);
                     label.setMinHeight(20);
+                    label.setTextFill(Color.BLUE);
                     hboxes.get(i).getChildren().add(label);
 
                 }
@@ -87,6 +89,7 @@ public class Visualisation{
                     Label label = new Label("-");
                     label.setMinWidth(20);
                     label.setMinHeight(20);
+                    label.setTextFill(Color.RED);
                     hboxes.get(i).getChildren().add(label);
 
                 }

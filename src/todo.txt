@@ -3,5 +3,3 @@ tests
 
 maybe - pathfinder using coordinates of current tile and exit
 maybe - set colour for top of stack to show current tile
-
-clean up classes

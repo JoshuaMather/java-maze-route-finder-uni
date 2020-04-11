@@ -1,6 +1,6 @@
+// Version 1.1, Tuesday 7th April @ 2:40pm
 package tests.dev;
 
-import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -110,7 +110,7 @@ public class MazeTest {
         Maze rtn = null;
         try {
             rtn = Maze.fromTxt("../mazes/maze1.txt");
-        } catch (FileNotFoundException e) { fail(); }
+        } catch (Exception e) { fail(); }
         return rtn;
     }
 
@@ -365,7 +365,7 @@ public class MazeTest {
             fail();
         } catch (InvalidMazeException e) {
             // OK
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             fail();
         }
     }

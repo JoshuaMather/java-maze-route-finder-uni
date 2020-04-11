@@ -15,6 +15,7 @@ import maze.*;
 import maze.visualisation.Visualisation;
 import maze.routing.RouteFinder;
 import maze.routing.NoRouteFoundException;
+import java.io.FileNotFoundException;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -122,6 +123,7 @@ public class MazeApplication extends Application{
         TextField tf = new TextField();
         Button submit = new Button("Submit");
 
+
         /**
          * Action for submit button
          * Searches mazes folder for specified text file
@@ -144,14 +146,24 @@ public class MazeApplication extends Application{
                 root.getChildren().addAll(hbox1, hbox2, mazeMap, hbox4);
                 stage.setScene(scene);
                 }
-                catch(Exception ex){
-                    System.out.println(ex);
-                }
+            catch(Exception ex){
+                System.out.println(ex);
+            }
         });
 
         inputBox.getChildren().addAll(tf, submit);
 
-        root2.getChildren().addAll(labelBox, inputBox);
+        /**
+         * Button for going back to the main scene
+         */
+        HBox backBox1 = new HBox();
+        Button back1 = new Button("Back");
+        back1.setOnAction(e->{
+            stage.setScene(scene);
+        });
+        backBox1.getChildren().addAll(back1);
+
+        root2.getChildren().addAll(labelBox, inputBox, backBox1);
 
         /**
          * Scene for getting empty maze
@@ -177,12 +189,12 @@ public class MazeApplication extends Application{
 
         /**
          * Action for submitting file to save to
-         * Passes file to RuoteFinder save method 
+         * Passes file to RuoteFinder save method where file is saved to routes folder
          * Sets scene to main scene
          */
         submit2.setOnAction(e->{
             try{
-                String saveFile = "../mazes/"+tf2.getText();
+                String saveFile = "../routes/"+tf2.getText();
                 rf.save(saveFile);
 
                 stage.setScene(scene);
@@ -194,7 +206,17 @@ public class MazeApplication extends Application{
 
         inputBox2.getChildren().addAll(tf2, submit2);
 
-        saveRoot.getChildren().addAll(labelBox2, inputBox2);
+        /**
+         * Button for going back to the main scene
+         */
+        HBox backBox2 = new HBox();
+        Button back2 = new Button("Back");
+        back2.setOnAction(e->{
+            stage.setScene(scene);
+        });
+        backBox2.getChildren().addAll(back2);
+
+        saveRoot.getChildren().addAll(labelBox2, inputBox2, backBox2);
 
         /**
          * Scene foe saving a maze state
@@ -211,7 +233,7 @@ public class MazeApplication extends Application{
          * Label for instructions, text field for file input and submit button
          */
         HBox labelBox3 = new HBox();
-        Label label3 = new Label("Enter a maze file to load route");
+        Label label3 = new Label("Enter a route file to load route");
         labelBox3.getChildren().addAll(label3);
 
         HBox inputBox3 = new HBox();
@@ -220,13 +242,13 @@ public class MazeApplication extends Application{
 
         /**
          * Action for submitting file to load
-         * Gets file from mazes folder, if it exists, and passes it to RouteFinder load method
+         * Gets file from routes folder, if it exists, and passes it to RouteFinder load method
          * Updates visualisation using string representation from RouteFinder
          * Sets scene to main maze scene
          */
         submit3.setOnAction(e->{
             try{
-                String loadFile = "../mazes/"+tf3.getText();
+                String loadFile = "../routes/"+tf3.getText();
                 rf = RouteFinder.load(loadFile);
 
                 Visualisation v = new Visualisation();
@@ -245,7 +267,17 @@ public class MazeApplication extends Application{
 
         inputBox3.getChildren().addAll(tf3, submit3);
 
-        loadRoot.getChildren().addAll(labelBox3, inputBox3);
+        /**
+         * Button for going back to the main scene
+         */
+        HBox backBox3 = new HBox();
+        Button back3 = new Button("Back");
+        back3.setOnAction(e->{
+            stage.setScene(scene);
+        });
+        backBox3.getChildren().addAll(back3);
+
+        loadRoot.getChildren().addAll(labelBox3, inputBox3, backBox3);
 
         /**
          * Scene for loading a maze with its route
