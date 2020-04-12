@@ -163,6 +163,10 @@ public class RouteFinder{
             throw new NoRouteFoundException();
         }
 
+        if(this.finished == true){
+            return true;
+        }
+
         Tile nextTile;
         Tile poppedTile;
         Tile currenTile = this.route.peek();
@@ -267,6 +271,7 @@ public class RouteFinder{
      * If a tile is in the popped list then it is represented as a -
      * If a tile is in the route stack then it is represented as a *
      * The entrance and exit keep their representation as e and x respectively, allowing them to be identified when the file is loaded
+     * However the exit becomes X if it is part of the route, this representation shows that the exit has been found 
      */
     public String toString(){
         String s = "";
@@ -274,20 +279,7 @@ public class RouteFinder{
 
 
         for(int i=0; i<theTiles.size(); i++){
-            if(theTiles.get(i).get(0).getType() == Tile.Type.CORRIDOR){
-                if(route.contains(theTiles.get(i).get(0))){
-                    s = s + "*";
-                }else if(popped.contains(theTiles.get(i).get(0))){
-                    s = s + "-";
-                }else{
-                    s = s + ".";
-                }
-            }else{
-                s = s + theTiles.get(i).get(0).toString();
-            }
-            
-
-            for(int j=1; j<theTiles.get(i).size();j++){
+            for(int j=0; j<theTiles.get(i).size();j++){
                 if(theTiles.get(i).get(j).getType() == Tile.Type.CORRIDOR){
                     if(route.contains(theTiles.get(i).get(j))){
                         s = s + "*";
@@ -295,6 +287,12 @@ public class RouteFinder{
                         s = s + "-";
                     }else{
                         s = s + ".";
+                    }
+                }else if(theTiles.get(i).get(j).getType() == Tile.Type.EXIT){
+                    if(route.contains(theTiles.get(i).get(j))){
+                        s = s + "X";
+                    }else{
+                        s = s + "x";
                     }
                 }else{
                     s = s + theTiles.get(i).get(j).toString();

@@ -20,6 +20,7 @@ public class Tile{
     protected static Tile fromChar(char givenchar){
         /**
          * Creates a new inatance of tile based on character that represents tile
+         * For exit X is used instead of x when the maze has been solved
          */
         if(givenchar == '#'){
             return new Tile(Type.WALL);
@@ -27,7 +28,7 @@ public class Tile{
         } else if(givenchar == 'e'){
             return new Tile(Type.ENTRANCE);
 
-        } else if(givenchar == 'x'){
+        } else if(givenchar == 'x'	|| givenchar == 'X'){
             return new Tile(Type.EXIT);
 
         } else{

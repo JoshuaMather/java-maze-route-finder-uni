@@ -77,6 +77,14 @@ public class Visualisation{
                     hboxes.get(i).getChildren().add(label);
 
                 }
+                else if(mazeChars.get(i).get(j) == 'X'){
+                    Label label = new Label("X");
+                    label.setMinWidth(20);
+                    label.setMinHeight(20);
+                    label.setTextFill(Color.BLUE);
+                    hboxes.get(i).getChildren().add(label);
+
+                }
                 else if(mazeChars.get(i).get(j) == '*'){
                     Label label = new Label("*");
                     label.setMinWidth(20);
