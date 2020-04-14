@@ -67,6 +67,7 @@ public class Visualisation{
                     Label label = new Label("e");
                     label.setMinWidth(20);
                     label.setMinHeight(20);
+                    label.setTextFill(Color.BLUE);
                     hboxes.get(i).getChildren().add(label);
 
                 }

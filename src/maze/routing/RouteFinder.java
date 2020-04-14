@@ -85,6 +85,12 @@ public class RouteFinder{
      * The RouteFinder object is then returned
      */
     public static RouteFinder load(String loadFile){  
+        File theFile = new File(loadFile);
+        if(theFile.length() == 0){
+            System.out.println("File is empty");
+            return null;
+        }
+        
         try(
             BufferedReader breader = new BufferedReader(
                 new FileReader(loadFile)

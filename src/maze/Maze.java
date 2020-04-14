@@ -71,6 +71,8 @@ public class Maze{
         ){
             String line = breader.readLine();
             int lineLength = line.length();
+            Tile entranceTile = null;
+            Tile exitTile = null;
 
             while(line!=null){
                 List<Tile> tileList = new ArrayList<Tile>();
@@ -81,11 +83,21 @@ public class Maze{
                     tileList.add(tile);
                     
                     if(tile.getType() == Tile.Type.ENTRANCE){
-                        m.setEntrance(tile);
+                        //m.setEntrance(tile);
+                        if(entranceTile == null){
+                            entranceTile = tile;
+                        }else{
+                            throw new MultipleEntranceException();
+                        }
 
                     }
                     if(tile.getType() == Tile.Type.EXIT){
-                        m.setExit(tile);
+                        //m.setExit(tile);
+                        if(exitTile == null){
+                            exitTile = tile;
+                        }else{
+                            throw new MultipleEntranceException();
+                        }
 
                     }
                 }
@@ -97,9 +109,10 @@ public class Maze{
                 }
                 line = breader.readLine();
                 
-
-
             }
+            m.setEntrance(entranceTile);
+            m.setExit(exitTile);
+
 
         }catch (FileNotFoundException e) {
             System.out.println("Error: Could not open " + givenFile);
@@ -108,10 +121,10 @@ public class Maze{
             System.out.println("Error: IOException when reading "+ givenFile);
        }    
 
-        if(m.entrance == null){
+        if(m.getEntrance() == null){
             throw new NoEntranceException();
         }
-        if(m.exit == null){
+        if(m.getExit() == null){
             throw new NoExitException();
         }
 
@@ -235,9 +248,16 @@ public class Maze{
     private void setEntrance(Tile givenTile) throws InvalidMazeException{
         /**
          * Sets the entrance of a maze
+         * Will only do so if the entrance tile is in the maze
          */
         if(this.entrance == null){
-            this.entrance = givenTile;
+            for(int i=0; i<this.getTiles().size(); i++){
+                for(int j=0; j<this.getTiles().get(i).size();j++){
+                    if(givenTile == this.getTiles().get(i).get(j)){
+                        this.entrance = givenTile;
+                    }
+                }    
+            }
         }else{
             throw new MultipleEntranceException();
         }
@@ -247,9 +267,16 @@ public class Maze{
     private void setExit(Tile givenTile) throws InvalidMazeException{
         /**
          * Sets the exit of a maze
+         * Will only do so if the exit tile is in the maze
          */
         if(this.exit == null){
-            this.exit = givenTile;
+            for(int i=0; i<this.getTiles().size(); i++){
+                for(int j=0; j<this.getTiles().get(i).size();j++){
+                    if(givenTile == this.getTiles().get(i).get(j)){
+                        this.exit = givenTile;
+                    }
+                }    
+            }
         }else{
             throw new MultipleExitException();
         }
