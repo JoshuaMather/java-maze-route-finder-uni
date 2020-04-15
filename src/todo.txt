@@ -1,4 +1,3 @@
 javadoc
 tests
 
-maybe - pathfinder using coordinates of current tile and exit

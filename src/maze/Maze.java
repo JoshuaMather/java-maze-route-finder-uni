@@ -20,7 +20,7 @@ public class Maze{
 
 
     /**
-     * Coordinate innner classe for cooridinates relating to tile position
+     * Coordinate inner class for cooridinates relating to tile position
      */
     public class Coordinate{
         private int x;
@@ -41,14 +41,14 @@ public class Maze{
 
         public String toString(){
             String coordString = "";
-            coordString = coordString + "(" + this.getX() + ", " + this.y + ")";
+            coordString = coordString + "(" + this.getX() + ", " + this.getY() + ")";
 
             return coordString;
         }
     }
 
     /**
-     * attributes for Maze class
+     * Attributes for Maze class
      */
     private Tile entrance;
     private Tile exit;

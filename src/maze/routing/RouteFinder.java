@@ -156,12 +156,121 @@ public class RouteFinder{
 
 
     /**
+     * Get next tile for South direction
+     */
+    public String southCheck(Tile currentTile){
+        Tile nextTile;
+
+        if(this.maze.getAdjacentTile(currentTile, Maze.Direction.SOUTH) != null){
+            nextTile = this.maze.getAdjacentTile(currentTile, Maze.Direction.SOUTH);
+
+            if(nextTile.getType() == Tile.Type.CORRIDOR){
+                if(this.route.contains(nextTile) == false){
+                    if(this.popped.contains(nextTile) == false){
+                        this.route.push(nextTile);
+                        return "corridor";
+            
+                    }
+                }
+            }else if(nextTile.getType() == Tile.Type.EXIT){
+                this.route.push(nextTile);
+                this.finished = true;
+                return "exit";
+            }
+        }
+        return "";
+    }
+
+
+    /**
+     * Get next tile for North direction
+     */
+    public String northCheck(Tile currentTile){
+        Tile nextTile;
+
+        if(this.maze.getAdjacentTile(currentTile, Maze.Direction.NORTH) != null){
+            nextTile = this.maze.getAdjacentTile(currentTile, Maze.Direction.NORTH);
+
+            if(nextTile.getType() == Tile.Type.CORRIDOR){
+                if(this.route.contains(nextTile) == false){
+                    if(this.popped.contains(nextTile) == false){
+                        this.route.push(nextTile);
+                        return "corridor";
+            
+                    }
+                }
+            }else if(nextTile.getType() == Tile.Type.EXIT){
+                this.route.push(nextTile);
+                this.finished = true;
+                return "exit";
+            }
+        }
+        return "";
+    }
+
+
+    /**
+     * Get next tile for East direction
+     */
+    public String eastCheck(Tile currentTile){
+        Tile nextTile;
+        
+        if(this.maze.getAdjacentTile(currentTile, Maze.Direction.EAST) != null){
+            nextTile = this.maze.getAdjacentTile(currentTile, Maze.Direction.EAST);
+
+            if(nextTile.getType() == Tile.Type.CORRIDOR){
+                if(this.route.contains(nextTile) == false){
+                    if(this.popped.contains(nextTile) == false){
+                        this.route.push(nextTile);
+                        return "corridor";
+            
+                    }
+                }
+            }else if(nextTile.getType() == Tile.Type.EXIT){
+                this.route.push(nextTile);
+                this.finished = true;
+                return "exit";
+            }
+        }
+        return "";
+    }
+
+
+    /**
+     * Get next tile for West direction
+     */
+    public String westCheck(Tile currentTile){
+        Tile nextTile;
+
+        if(this.maze.getAdjacentTile(currentTile, Maze.Direction.WEST) != null){
+            nextTile = this.maze.getAdjacentTile(currentTile, Maze.Direction.WEST);
+
+            if(nextTile.getType() == Tile.Type.CORRIDOR){
+                if(this.route.contains(nextTile) == false){
+                    if(this.popped.contains(nextTile) == false){
+                        this.route.push(nextTile);
+                        return "corridor";
+            
+                    }
+                }
+            }else if(nextTile.getType() == Tile.Type.EXIT){
+                this.route.push(nextTile);
+                this.finished = true;
+                return "exit";
+            }
+        }
+        return "";
+    }
+
+
+    /**
      * Method for steping through a maze
      * First checks if the route stack is empty, if it is then no route is able to be found as there would be no route to exit
      * Next gets the current tile, the one at the top of the stack
-     * The next tile in the route is then found by checking directions in the order South, East, North, West and once one of them works the step method returns a boolean
-     * I chose this order as based on the example mazes this leads to the quickest route, it will work for any maze type though may not always be the quickest route
-     *  If the next tile is the exit then the maze is finished and so the finished boolean is set to true
+     * The next tile in the route is found by using the difference in coordinates between the current tile and the exit tile
+     * This is done to try to find the quickest route though it can lead to dead ends and the route may not be the quickest
+     * Once one of the checks works the step method returns a Booelan, true for the exit found and false for otherwise
+     * If the next tile is the exit then the maze is finished and so the finished boolean is set to true
      * If no next tile is found then the top tile is popped off the stack allowing the route to backtrack
      */
     public boolean step() throws NoRouteFoundException{
@@ -175,95 +284,79 @@ public class RouteFinder{
 
         Tile nextTile;
         Tile poppedTile;
-        Tile currenTile = this.route.peek();
+        Tile currentTile = this.route.peek();
+
+        Maze.Coordinate currentCo = this.getMaze().getTileLocation(currentTile);
+        Maze.Coordinate exitCo = this.getMaze().getTileLocation(this.getMaze().getExit());
 
         /**
-         * South check
+         * Difference between coordinates for exit and current tile used to decide where to step next
+         * If x positive check east first, if negative west
+         * If y positive check north first, if negative south
+         * x checked first, then y checked
          */
-        if(this.maze.getAdjacentTile(currenTile, Maze.Direction.SOUTH) != null){
-            nextTile = this.maze.getAdjacentTile(currenTile, Maze.Direction.SOUTH);
+        int xDiff = exitCo.getX() - currentCo.getX();
+        int yDiff = exitCo.getY() - currentCo.getY();
 
-            if(nextTile.getType() == Tile.Type.CORRIDOR){
-                if(this.route.contains(nextTile) == false){
-                    if(this.popped.contains(nextTile) == false){
-                        this.route.push(nextTile);
-                        return false;
-            
-                    }
-                }
-            }else if(nextTile.getType() == Tile.Type.EXIT){
-                this.route.push(nextTile);
-                this.finished = true;
+        if(xDiff >= 0){
+            String e = eastCheck(currentTile);
+            if(e == "corridor"){
+                return false;
+            }else if(e == "exit"){
+                return true;
+            }
+
+            String w = westCheck(currentTile);
+            if(w == "corridor"){
+                return false;
+            }else if(w == "exit"){
+                return true;
+            }
+        }else{
+            String w = westCheck(currentTile);
+            if(w == "corridor"){
+                return false;
+            }else if(w == "exit"){
+                return true;
+            }
+
+            String e = eastCheck(currentTile);
+            if(e == "corridor"){
+                return false;
+            }else if(e == "exit"){
                 return true;
             }
         }
 
+        if(yDiff >= 0){
+            String n = northCheck(currentTile);
+            if(n == "corridor"){
+                return false;
+            }else if(n == "exit"){
+                return true;
+            }
 
-        /**
-         * East check
-         */
-        if(this.maze.getAdjacentTile(currenTile, Maze.Direction.EAST) != null){
-            nextTile = this.maze.getAdjacentTile(currenTile, Maze.Direction.EAST);
+            String s = southCheck(currentTile);
+            if(s == "corridor"){
+                return false;
+            }else if(s == "exit"){
+                return true;
+            }
+        }else{
+            String s = southCheck(currentTile);
+            if(s == "corridor"){
+                return false;
+            }else if(s == "exit"){
+                return true;
+            }
 
-            if(nextTile.getType() == Tile.Type.CORRIDOR){
-                if(this.route.contains(nextTile) == false){
-                    if(this.popped.contains(nextTile) == false){
-                        this.route.push(nextTile);
-                        return false;
-            
-                    }
-                }
-            }else if(nextTile.getType() == Tile.Type.EXIT){
-                this.route.push(nextTile);
-                this.finished = true;
+            String n = northCheck(currentTile);
+            if(n == "corridor"){
+                return false;
+            }else if(n == "exit"){
                 return true;
             }
         }
-
-
-        /**
-         * North check
-         */
-        if(this.maze.getAdjacentTile(currenTile, Maze.Direction.NORTH) != null){
-            nextTile = this.maze.getAdjacentTile(currenTile, Maze.Direction.NORTH);
-
-            if(nextTile.getType() == Tile.Type.CORRIDOR){
-                if(this.route.contains(nextTile) == false){
-                    if(this.popped.contains(nextTile) == false){
-                        this.route.push(nextTile);
-                        return false;
-            
-                    }
-                }
-            }else if(nextTile.getType() == Tile.Type.EXIT){
-                this.route.push(nextTile);
-                this.finished = true;
-                return true;
-            }
-        }
-
-
-        /**
-         * West check
-         */
-        if(this.maze.getAdjacentTile(currenTile, Maze.Direction.WEST) != null){
-            nextTile = this.maze.getAdjacentTile(currenTile, Maze.Direction.WEST);
-
-            if(nextTile.getType() == Tile.Type.CORRIDOR){
-                if(this.route.contains(nextTile) == false){
-                    if(this.popped.contains(nextTile) == false){
-                        this.route.push(nextTile);
-                        return false;
-            
-                    }
-                }
-            }else if(nextTile.getType() == Tile.Type.EXIT){
-                this.route.push(nextTile);
-                this.finished = true;
-                return true;
-            }
-        }
-        
 
         poppedTile = this.route.pop();
         this.popped.add(poppedTile);
