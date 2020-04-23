@@ -1,4 +1,4 @@
-// Version 1.1, Tuesday 7th April @ 2:40pm
+// Version 1.2, Friday 17th April @ 9:10pm
 package tests.dev;
 
 import java.lang.reflect.Constructor;
@@ -91,8 +91,13 @@ public class MazeTest {
             return (Tile)method.invoke(null, c);
         } catch (ClassNotFoundException e) {
             fail("ClassNotFoundException: maze.Tile");
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException e) {
             fail(e.getClass().getName() + ": Tile.fromChar");
+        } catch (InvocationTargetException e) {
+          fail(
+              e.getClass().getName() + ": Tile.fromChar\nCause: " +
+              e.getCause().getClass() + ": " + e.getCause().getMessage()
+          );
         }
         return null;
     }
@@ -449,10 +454,14 @@ public class MazeTest {
             method.setAccessible(true);
             method.invoke(maze, newEntrance);
         } catch (
-            NoSuchMethodException | InvocationTargetException |
-            IllegalAccessException e
+            NoSuchMethodException | IllegalAccessException e
         ) {
             fail(e.getClass().getName() + ": setEntrance");
+        } catch (InvocationTargetException e) {
+            fail(
+                e.getClass().getName() + ": setEntrance\nCause: " +
+                e.getCause().getClass() + ": " + e.getCause().getMessage()
+            );
         }
 
         // Check the new value of entrance
@@ -569,10 +578,14 @@ public class MazeTest {
             method.setAccessible(true);
             method.invoke(maze, newExit);
         } catch (
-            NoSuchMethodException | InvocationTargetException |
-            IllegalAccessException e
+            NoSuchMethodException | IllegalAccessException e
         ) {
             fail(e.getClass().getName() + ": setExit");
+        } catch (InvocationTargetException e) {
+            fail(
+                e.getClass().getName() + ": setExit\nCause: " +
+                e.getCause().getClass() + ": " + e.getCause().getMessage()
+            );
         }
 
         // Check the new value of exit

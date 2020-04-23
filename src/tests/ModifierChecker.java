@@ -16,8 +16,10 @@ public class ModifierChecker {
                     System.out.println(Modifier.isStatic(
                         innerClass.getModifiers()
                     ));
+                    return;
                 }
             }
+            System.out.println("error");
         } catch (ClassNotFoundException e) {
             System.out.println("error");
         }
