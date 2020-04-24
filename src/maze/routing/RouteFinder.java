@@ -11,9 +11,12 @@ import java.util.HashSet;
 import java.io.IOException;
 import java.util.Collections;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class RouteFinder{
+public class RouteFinder implements Serializable{
     private Maze maze;
     private Stack<Tile> route = new Stack<Tile>();
     private boolean finished;
@@ -77,78 +80,52 @@ public class RouteFinder{
 
     /**
      * Method for loading a maze with its route state
-     * File to load is passed in and a new maze instance is set using it
-     * A new RouteFinder is created using the maze created
-     * The file is read through and a string is populated with the text in the file
-     * The step method is done on the new RouteFinder until the string matches the text representaion of the RouteFinder 
-     * When they do match the route will be the same as the one stored in the text file
+     * File to load is passed in 
+     * A new RouteFinder is created and set to null
+     * The save RouteFinder is deserialised the set to the created route finder, if it can be
      * The RouteFinder object is then returned
      */
     public static RouteFinder load(String loadFile){  
-        File theFile = new File(loadFile);
-        if(theFile.length() == 0){
-            System.out.println("File is empty");
-            return null;
+        RouteFinder rf = null;
+        try{
+
+            FileInputStream file = new FileInputStream(loadFile); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+              
+            rf = (RouteFinder)in.readObject(); 
+              
+            in.close(); 
+            file.close(); 
+
+
         }
-        
-        try(
-            BufferedReader breader = new BufferedReader(
-                new FileReader(loadFile)
-            )
-        ){
-            Maze loadMaze = Maze.fromTxt("../mazes/"+loadFile);
-            RouteFinder rf = new RouteFinder(loadMaze);
-            String routeState = "";    
-
-            String line = breader.readLine();
-
-            while(line!=null){
-                routeState = routeState + line + "\n";
-
-                line = breader.readLine();
-            }
-            
-            while(rf.toString().equals(routeState) == false){
-                try{
-                    rf.step();
-                }catch(NoRouteFoundException nr){
-                    System.out.println(nr);
-                }
-            }
-
-            return rf;
-        }catch (FileNotFoundException e) {
-            System.out.println("Error: Could not open " + loadFile);
-        }catch (IOException e) {
+        catch (IOException e) {
             System.out.println("Error: IOException when reading "+ loadFile);
-        }catch(InvalidMazeException e){
+        }
+        catch(ClassNotFoundException e){
             System.out.println(e);
         }
-        return null;
+        return rf;
     }
 
 
     /**
      * Method for saving a maze and route to text file
      * Name of file to save to is passed in
-     * File is then written to with RouteFinder's string representation
+     * File is then written to using serialisation of RouteFinder
      */
-    public void save(String saveFile) throws IOException{
-        String mazeString = this.toString();
-
+    public void save(String saveFile){
         try{
-            File file = new File(saveFile);
+            FileOutputStream file = new FileOutputStream(saveFile); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+              
+            out.writeObject(this); 
+              
+            out.close(); 
+            file.close(); 
 
-            FileWriter fileWriter = new FileWriter(file);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-    
-            printWriter.print(mazeString);
-    
-            fileWriter.close();
-            printWriter.close();
         }catch(IOException e){
-            System.out.println("Error");
-            throw new IOException();
+            System.out.println("IOException");
           }
     
 

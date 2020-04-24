@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.List;
 import java.util.ArrayList;
 
 
 
-public class Maze{
+public class Maze implements Serializable{
     /**
      * Direction inner class for maze direction
      */

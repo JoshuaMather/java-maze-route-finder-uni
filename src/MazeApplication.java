@@ -199,9 +199,9 @@ public class MazeApplication extends Application{
 
                 stage.setScene(scene);
                 }
-                catch(Exception ex){
-                    System.out.println(ex);
-                }
+            catch(Exception ex){
+                System.out.println(ex);
+            }
         });
 
         inputBox2.getChildren().addAll(tf2, submit2);
@@ -260,9 +260,9 @@ public class MazeApplication extends Application{
                 root.getChildren().addAll(hbox1, hbox2, mazeMap, hbox4);
                 stage.setScene(scene);
                 }
-                catch(Exception ex){
-                    System.out.println(ex);
-                }
+            catch(Exception ex){
+                System.out.println(ex);
+            }
         });
 
         inputBox3.getChildren().addAll(tf3, submit3);
